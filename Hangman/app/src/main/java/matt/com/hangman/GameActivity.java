@@ -1,6 +1,5 @@
 package matt.com.hangman;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Random;
 
 import static matt.com.hangman.R.id.usedLetters;
-
 
 public class GameActivity extends AppCompatActivity{
     String[] WORD_LIST = new String[]{"word"};
@@ -86,14 +84,19 @@ public class GameActivity extends AppCompatActivity{
                 display = display.replace("" + mGameWord.charAt(i), "_ ");
                 isCorrect = false;
 
+
             }else{
                 display = display.replace("" + mGameWord.charAt(i), "" + mGameWord.charAt(i) + " ");
+                isCorrect = true;
+
             }
         }
 
         TextView word = (TextView)findViewById(R.id.wordGuessed);
         word.setText(display);
 
+        if(!isCorrect)
+            guessFail(v);
 
 
 
@@ -128,11 +131,8 @@ public class GameActivity extends AppCompatActivity{
         //letters.setText(Character.toString(letter));
         // TODO figure out how to add to the word
     }
-
-    public void guessFail(String failedLetter, View v){
-        TextView textViewFailed = (TextView) findViewById(R.id.failedLetters);
-        String previousFails = textViewFailed.getText().toString();
-        textViewFailed.setText(previousFails + failedLetter);
+*/
+    public void guessFail(View v){
 
         mFailCounter++;
         ImageView imageView = (ImageView)(findViewById(R.id.imageView));
@@ -153,7 +153,7 @@ public class GameActivity extends AppCompatActivity{
         }
 
     }
-    */
+
     public void gameLost(){
         Intent intent = new Intent(this, GameOver.class);
         resetGame();

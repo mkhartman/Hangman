@@ -26,7 +26,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void startSPGame(View v){
         Intent intent = new Intent(this, GameActivity.class);
-
         startActivity(intent);
+    }
+
+    public void startAbout(View v){
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void exitApp(View v){
+        this.finishAffinity();
     }
 }
