@@ -18,9 +18,12 @@ import java.util.Random;
 import static matt.com.hangman.R.id.usedLetters;
 
 public class GameActivity extends AppCompatActivity{
-    String[] WORD_LIST = new String[]{"word"};
-    //String[] WORD_LIST = new String[]{"word", "meme", "internet", "android", "computer", "stack", "overflow", "game", "stress", "anxiety"};
-    int mFailCounter = 0;
+    //String[] WORD_LIST = new String[]{"word"};
+    String[] WORD_LIST = new String[]{"word", "meme", "internet", "android", "computer", "stack", "overflow", "game", "stress",
+            "anxiety", "xylophone", "java", "quest", "ski", "hangman", "desk", "zebra", "kite", "league", "quell", "dictionary",
+            "lupoli", "stromboli", "pizza", "food", "watch", "look", "phone", "letter", "camera", "cheese", "spaghetti", "western",
+            "wrong", "horn", "car", "library", "corn", "gallows", "check", "cheque", "queue", "static", "points", "llama"};
+    public static int mFailCounter = 0;
     List<String> guessedLetters;
     int mCorrectGuesses = 0;
     String mGameWord;
@@ -72,32 +75,48 @@ public class GameActivity extends AppCompatActivity{
     }
 
     public void checkLetter(String guess, View v){
-        TextView debug = (TextView)findViewById(R.id.debugWord);
-        debug.setText(mGameWord);
+        //TextView debug = (TextView)findViewById(R.id.debugWord);
+        //debug.setText(mGameWord);
         String display = mGameWord;
         String noDupes = removeDuplicates(guess);
-        boolean isCorrect = true;
+        boolean isCorrect = false;
+        display = "";
         // Replace letters with _ if they are not known and update _'s to letters as they are guessed
+        if(!mGameWord.contains(guessedLetters.get(guessedLetters.size() - 1)))
+        {
+            guessFail(v);
+        }
         for(int i = 0; i < mGameWord.length(); i++){
             Log.d("Letter", "" + mGameWord.charAt(i));
-            if(!guessedLetters.contains("" + mGameWord.charAt(i))){
-                display = display.replace("" + mGameWord.charAt(i), "_ ");
-                isCorrect = false;
 
+            if(!guessedLetters.contains("" + mGameWord.charAt(i))){
+
+                //display = display.replace("" + mGameWord.charAt(i), "_");
+                display = display + "_ ";
 
             }else{
-                display = display.replace("" + mGameWord.charAt(i), "" + mGameWord.charAt(i) + " ");
+                //display = display.replace("" + mGameWord.charAt(i), "" + mGameWord.charAt(i) + " ");
+                display = display + mGameWord.charAt(i);
                 isCorrect = true;
-
             }
         }
 
         TextView word = (TextView)findViewById(R.id.wordGuessed);
         word.setText(display);
 
-        if(!isCorrect)
-            guessFail(v);
-
+        //if(!isCorrect)
+          //  guessFail(v);
+    /*
+        String fakeWord = mGameWord;
+        for(int i = 0; i < mGameWord.length(); i++)
+        {
+            fakeWord = mGameWord.charAt(i) + " ";
+        }
+    */
+        if(mGameWord.equalsIgnoreCase(display.replaceAll("\\s+", "")))
+        {
+            gameLost();
+        }
 
 
         /*
@@ -156,7 +175,12 @@ public class GameActivity extends AppCompatActivity{
 
     public void gameLost(){
         Intent intent = new Intent(this, GameOver.class);
-        resetGame();
+        Bundle bundle = new Bundle();
+        String toPass = Integer.toString(mFailCounter);
+        String wordGuessed = mGameWord;
+        bundle.putString("myKey", toPass);
+        bundle.putString("wordGuessed", wordGuessed);
+        intent.putExtras(bundle);
         startActivity(intent);
 
     }
